@@ -1,17 +1,12 @@
 import Card from "./Card";
+import EditMode from "./EditMode";
 
 function Dashboard() {
   return (
-    <h1 className="w-full max-w-[900px] bg-white flex flex-wrap box-border">
-      <Card color={"red"} />
-      <Card color={"green"} />
-      <Card color={"yellow"} />
-      <Card color={"red"} />
-      <Card color={"green"} />
-      <Card color={"red"} />
-      <Card color={"green"} />
-      <Card color={"yellow"} />
-    </h1>
+    <div className="w-full max-w-[900px] bg-white flex justify-center flex-wrap box-border">
+      {/* <Card color={"red"} /> */}
+      <EditMode />
+    </div>
   );
 }
 
