@@ -1,24 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import "./components/Dashboard";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="w-screen h-screen overflow-hidden flex justify-center items-start pt-[20rem]"
+      style={{
+        background:
+          "linear-gradient(0deg, rgba(40,34,43,1) 0%, rgba(98,87,104,1) 100%)",
+      }}
+    >
+      <Dashboard />
     </div>
   );
 }
