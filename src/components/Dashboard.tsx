@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Card from "./Card";
 import metricData from "../metric.json";
 import { Add } from "../icons/Add";
@@ -63,7 +63,7 @@ function Dashboard() {
           key={metric.id}
           className="w-full max-w-[900px] bg-white flex justify-center flex-wrap box-border my-1 relative"
         >
-          <h4 className="absolute left-2 top-2 font-medium">
+          <h4 className="absolute left-8 top-2 font-medium">
             {metric.displayName}
           </h4>
           {cardCounts[metric.id].map((cardIndex, index) => (

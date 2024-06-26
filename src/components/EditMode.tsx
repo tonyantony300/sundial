@@ -8,7 +8,7 @@ type Props = {
   name: string;
   onAdd: () => void;
   onCancel: () => void;
-  onDataUpdate: (segmentId: string | null, segmentKey: string | null) => void; // New prop
+  onDataUpdate: (segmentId: string | null, segmentKey: string | null) => void;
 };
 
 const mapSegmentKeyOptions = (data: segmentResponse["data"]) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import EditMode from "./EditMode";
 import ViewMode from "./ViewMode";
 
@@ -31,7 +31,6 @@ function Card(props: Props) {
 
   const handleCancel = () => {
     if (props.cardIndex !== 0) {
-      console.log("Need to remove this card");
       props.onCancel();
     }
     setIsEditMode(false);

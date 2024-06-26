@@ -85,7 +85,7 @@ const initialOptions: Options = {
     {
       type: "area",
       name: "Example Series",
-      data: Array(28).fill(0),
+      data: [1, 2, 3, 4, 5, 10, 20, 30, 3, 55, 22, 15, 12, 10, 45],
     } as Highcharts.SeriesAreaOptions,
   ],
 };
@@ -124,7 +124,10 @@ function ViewMode(props: Props) {
 
   return (
     <div className="h-[184px] p-8 relative">
-      <h5 className="font-medium text-[#808080]">Platform | Android</h5>
+      <h5 className="font-medium text-[#808080]">
+        {props.selectedSegmentKey || "segment key"} |{" "}
+        {props.selectedSegmentId || "segment ID"}
+      </h5>
       <h1 className="mt-6 font-medium text-3xl">12.5k</h1>
       <span className="flex">
         <Up />

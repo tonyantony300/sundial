@@ -6,6 +6,12 @@ export interface metricResponse {
 		}>
 }
 
+export interface Metric {
+	id: string;
+	displayName: string;
+	isPercentageMetric: boolean;
+  }
+
 export interface segmentResponse {
 	data: Array<{
 	  segmentKey: string;
