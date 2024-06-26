@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EditMode from "./EditMode";
 import ViewMode from "./ViewMode";
 
@@ -8,10 +8,12 @@ interface Props {
     displayName: string;
     isPercentageMetric: boolean;
   };
+  cardIndex: number;
+  onCancel: () => void;
 }
 
 function Card(props: Props) {
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(props.cardIndex !== 0);
   const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(
     null
   );
@@ -28,6 +30,10 @@ function Card(props: Props) {
   };
 
   const handleCancel = () => {
+    if (props.cardIndex !== 0) {
+      console.log("Need to remove this card");
+      props.onCancel();
+    }
     setIsEditMode(false);
   };
 

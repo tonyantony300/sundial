@@ -131,18 +131,13 @@ function ViewMode(props: Props) {
         3.5%
         <span className="ml-2 text-[#808080]">Δ7d</span>
       </span>
-      <div className="absolute w-[80%] h-full right-0 top-0">
+      <div className="absolute w-[60%] h-full right-0 top-0">
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
           constructorType={"chart"}
           containerProps={{ className: "h-full w-full" }}
         />
-      </div>
-      <div>
-        <p>Selected Metric id: {props.metricId}</p>
-        <p>Selected Segment Key: {props.selectedSegmentKey}</p>
-        <p>Selected Segment ID: {props.selectedSegmentId}</p>
       </div>
     </div>
   );

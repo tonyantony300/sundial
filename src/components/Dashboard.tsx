@@ -10,28 +10,49 @@ interface Metric {
 }
 
 interface CardCounts {
-  [key: string]: number;
+  [key: string]: number[];
 }
 
 function Dashboard() {
-  const [cardCounts, setCardCounts] = useState<CardCounts>(
-    metricData.data.reduce((acc: CardCounts, metric: Metric) => {
-      acc[metric.id] = 1;
+  const initialCardCounts: CardCounts = metricData.data.reduce(
+    (acc: CardCounts, metric: Metric) => {
+      acc[metric.id] = [0];
       return acc;
-    }, {})
+    },
+    {}
   );
 
+  const [cardCounts, setCardCounts] = useState<CardCounts>(initialCardCounts);
+
   const handleAddCardLeft = (metricId: string, index: number) => {
-    setCardCounts({
-      ...cardCounts,
-      [metricId]: cardCounts[metricId] + 1,
+    setCardCounts((prevCounts) => {
+      const newCounts = { ...prevCounts };
+      newCounts[metricId] = [
+        ...newCounts[metricId].slice(0, index),
+        newCounts[metricId].length,
+        ...newCounts[metricId].slice(index),
+      ];
+      return newCounts;
     });
   };
 
   const handleAddCardRight = (metricId: string, index: number) => {
-    setCardCounts({
-      ...cardCounts,
-      [metricId]: cardCounts[metricId] + 1,
+    setCardCounts((prevCounts) => {
+      const newCounts = { ...prevCounts };
+      newCounts[metricId] = [
+        ...newCounts[metricId].slice(0, index + 1),
+        newCounts[metricId].length,
+        ...newCounts[metricId].slice(index + 1),
+      ];
+      return newCounts;
+    });
+  };
+
+  const handleCancel = (metricId: string, index: number) => {
+    setCardCounts((prevCounts) => {
+      const newCounts = { ...prevCounts };
+      newCounts[metricId] = newCounts[metricId].filter((_, i) => i !== index);
+      return newCounts;
     });
   };
 
@@ -45,28 +66,30 @@ function Dashboard() {
           <h4 className="absolute left-2 top-2 font-medium">
             {metric.displayName}
           </h4>
-          {Array.from({ length: cardCounts[metric.id] }).map((_, cardIndex) => (
+          {cardCounts[metric.id].map((cardIndex, index) => (
             <div
               key={`${metric.id}-${cardIndex}`}
               className="relative min-w-[184px] basis-1/3 grow group"
             >
-              {cardIndex === 0 && (
+              {index === 0 && (
                 <button
-                  onClick={() => handleAddCardLeft(metric.id, cardIndex)}
+                  onClick={() => handleAddCardLeft(metric.id, index)}
                   className="absolute left-0 bottom-1/2 w-[25px] h-[25px] rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <Add />
                 </button>
               )}
-              <Card metric={metric} />
-              {cardIndex === cardCounts[metric.id] - 1 && (
-                <button
-                  onClick={() => handleAddCardRight(metric.id, cardIndex)}
-                  className="absolute right-0 bottom-1/2 w-[25px] h-[25px] rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <Add />
-                </button>
-              )}
+              <Card
+                metric={metric}
+                cardIndex={cardIndex}
+                onCancel={() => handleCancel(metric.id, cardIndex)}
+              />
+              <button
+                onClick={() => handleAddCardRight(metric.id, index)}
+                className="absolute right-0 bottom-1/2 w-[25px] h-[25px] rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Add />
+              </button>
             </div>
           ))}
         </div>
