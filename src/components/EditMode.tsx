@@ -4,15 +4,12 @@ import { metricResponse, segmentResponse } from "../dtos/index.dtos";
 import metricData from "../metric.json";
 import segmentData from "../segment.json";
 
-// Function to map metric data to react-select options
-const mapMetricOptions = (data: metricResponse["data"]) => {
-  return data.map((metric) => ({
-    value: metric.id,
-    label: metric.displayName,
-  }));
+type Props = {
+  id: string;
+  name: string;
+  onAdd: () => void;
 };
 
-// Function to map segment data to react-select options
 const mapSegmentKeyOptions = (data: segmentResponse["data"]) => {
   return data.map((segment) => ({
     value: segment.segmentKey,
@@ -20,7 +17,6 @@ const mapSegmentKeyOptions = (data: segmentResponse["data"]) => {
   }));
 };
 
-// Function to map segment values data to react-select options
 const mapSegmentIdOptions = (
   data: segmentResponse["data"],
   selectedKey: string
@@ -36,8 +32,7 @@ const mapSegmentIdOptions = (
     : [];
 };
 
-function EditMode() {
-  let [metric, setMetric] = useState<metricResponse["data"]>(metricData.data);
+function EditMode(props: Props) {
   let [segment, setSegment] = useState<segmentResponse["data"]>(
     segmentData.data
   );
@@ -55,20 +50,14 @@ function EditMode() {
     // fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(metric, segment);
-  }, [metric, segment]);
-
-  // Generate options for react-select
-  const MetricOptions = mapMetricOptions(metric);
   const SegmentKeyOptions = mapSegmentKeyOptions(segment);
   const SegmentIdOptions = selectedSegmentKey
     ? mapSegmentIdOptions(segment, selectedSegmentKey)
     : [];
 
   return (
-    <div className="w-[16rem] h-[12rem] bg-slate-400 px-3">
-      <Select options={MetricOptions} placeholder={"Select metric"} />
+    <div className="w-[184px] h-[184px] bg-slate-400 px-3">
+      <h3>{props.name}</h3>
       <Select
         options={SegmentKeyOptions}
         placeholder={"Select segmentKey"}
@@ -81,11 +70,14 @@ function EditMode() {
         placeholder={"Select segmentId"}
         isDisabled={!selectedSegmentKey}
       />
-      <div className="flex justify-between items-center mt-auto">
+      <div className="flex justify-between items-center mt-10">
         <button className="px-[15px] py-[5px] text-red-500 bg-red-200 rounded-md">
           Cancel
         </button>
-        <button className="px-[15px] py-[5px] text-green-500 bg-green-200 rounded-md">
+        <button
+          className="px-[15px] py-[5px] text-green-500 bg-green-200 rounded-md"
+          onClick={props.onAdd}
+        >
           Add
         </button>
       </div>
