@@ -22,7 +22,7 @@ function Card(props: Props) {
   };
 
   return (
-    <div className="min-w-[300px] basis-1/3 grow">
+    <div className="">
       {isEditMode ? (
         <EditMode
           id={props.metric.id}
@@ -31,7 +31,7 @@ function Card(props: Props) {
         />
       ) : (
         <div onClick={handleViewClick}>
-          <ViewMode />
+          <ViewMode name={props.metric.displayName} />
         </div>
       )}
     </div>
