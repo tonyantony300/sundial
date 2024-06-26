@@ -13,16 +13,16 @@ export const Up = () => {
         <path
           d="M8.00001 3.33334V12.6667"
           stroke="#119F97"
-          stroke-width="1.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path
           d="M4.666 6.66667L8 3.33267L11.334 6.66667"
           stroke="#119F97"
-          stroke-width="1.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </span>
