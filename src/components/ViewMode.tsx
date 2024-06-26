@@ -1,24 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Up } from "../icons/Up";
-import Highcharts, { Options, SeriesOptionsType } from "highcharts";
+import Highcharts, { Options } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { fetchSnapshot } from "../apis/snapshot";
-
-interface DataPoint {
-  date: string;
-  value: number;
-}
-
-interface ResponseData {
-  metric: string;
-  segmentKey: string;
-  segmentId: string;
-  values: DataPoint[];
-}
-
-interface Response {
-  data: ResponseData;
-}
 
 type Props = {
   metricId: string;
