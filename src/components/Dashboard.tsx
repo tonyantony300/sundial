@@ -42,6 +42,9 @@ function Dashboard() {
           key={metric.id}
           className="w-full max-w-[900px] bg-white flex justify-center flex-wrap box-border my-1 relative"
         >
+          <h4 className="absolute left-2 top-2 font-medium">
+            {metric.displayName}
+          </h4>
           {Array.from({ length: cardCounts[metric.id] }).map((_, cardIndex) => (
             <div
               key={`${metric.id}-${cardIndex}`}

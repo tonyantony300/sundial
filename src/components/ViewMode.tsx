@@ -1,13 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Up } from "../icons/Up";
-import Highcharts, { Tooltip } from "highcharts";
+import Highcharts, { Options, SeriesOptionsType } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { fetchSnapshot } from "../apis/snapshot";
+
+interface DataPoint {
+  date: string;
+  value: number;
+}
+
+interface ResponseData {
+  metric: string;
+  segmentKey: string;
+  segmentId: string;
+  values: DataPoint[];
+}
+
+interface Response {
+  data: ResponseData;
+}
 
 type Props = {
-  name: string;
+  metricId: string;
+  selectedSegmentId: string | null;
+  selectedSegmentKey: string | null;
 };
 
-const options = {
+const initialOptions: Options = {
   chart: {
     type: "area",
     backgroundColor: "transparent",
@@ -39,7 +58,6 @@ const options = {
   },
   tooltip: {
     enabled: false,
-    shadow: false,
   },
   plotOptions: {
     area: {
@@ -65,19 +83,48 @@ const options = {
   },
   series: [
     {
+      type: "area",
       name: "Example Series",
-      data: [
-        29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1,
-        95.6, 54.4,
-      ],
-    },
+      data: Array(28).fill(0),
+    } as Highcharts.SeriesAreaOptions,
   ],
 };
 
 function ViewMode(props: Props) {
+  const [chartOptions, setChartOptions] =
+    useState<Highcharts.Options>(initialOptions);
+
+  useEffect(() => {
+    if (props.selectedSegmentKey && props.selectedSegmentId) {
+      const callingForSnapshot = async () => {
+        const retrievedSnapshotData = await fetchSnapshot(
+          props.metricId,
+          props.selectedSegmentKey,
+          props.selectedSegmentId
+        );
+
+        const newChartData = retrievedSnapshotData.data.values.map(
+          (item) => item.value
+        );
+        setChartOptions((prevOptions) => ({
+          ...prevOptions,
+          series: [
+            {
+              type: "area",
+              name: "Example Series",
+              data: newChartData,
+            } as Highcharts.SeriesAreaOptions,
+          ],
+        }));
+      };
+
+      callingForSnapshot();
+    }
+  }, [props.selectedSegmentKey, props.selectedSegmentId, props.metricId]);
+
   return (
     <div className="h-[184px] p-8 relative">
-      <h5 className="font-medium ">{props.name}</h5>
+      <h5 className="font-medium text-[#808080]">Platform | Android</h5>
       <h1 className="mt-6 font-medium text-3xl">12.5k</h1>
       <span className="flex">
         <Up />
@@ -87,10 +134,15 @@ function ViewMode(props: Props) {
       <div className="absolute w-[80%] h-full right-0 top-0">
         <HighchartsReact
           highcharts={Highcharts}
-          options={options}
+          options={chartOptions}
           constructorType={"chart"}
           containerProps={{ className: "h-full w-full" }}
         />
+      </div>
+      <div>
+        <p>Selected Metric id: {props.metricId}</p>
+        <p>Selected Segment Key: {props.selectedSegmentKey}</p>
+        <p>Selected Segment ID: {props.selectedSegmentId}</p>
       </div>
     </div>
   );

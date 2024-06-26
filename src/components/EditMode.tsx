@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { metricResponse, segmentResponse } from "../dtos/index.dtos";
-import metricData from "../metric.json";
+import { segmentResponse } from "../dtos/index.dtos";
 import segmentData from "../segment.json";
 
 type Props = {
   id: string;
   name: string;
   onAdd: () => void;
+  onCancel: () => void;
+  onDataUpdate: (segmentId: string | null, segmentKey: string | null) => void; // New prop
 };
 
 const mapSegmentKeyOptions = (data: segmentResponse["data"]) => {
@@ -39,16 +40,30 @@ function EditMode(props: Props) {
   let [selectedSegmentKey, setSelectedSegmentKey] = useState<string | null>(
     null
   );
+  let [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null);
+  let [enableAdd, setEnableAdd] = useState<boolean>(false);
+
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      fontSize: "14px",
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      fontSize: "12px",
+    }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      fontSize: "14px",
+      whiteSpace: "noWrap",
+    }),
+  };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   const metricsData: metricResponse = await fetchMetrics();
-    //   setMetric(metricsData.data);
-    //   const segmentsData: segmentResponse = await fetchSegments();
-    //   setSegment(segmentsData.data);
-    // };
-    // fetchData();
-  }, []);
+    if (selectedSegmentKey !== null) {
+      setEnableAdd(true);
+    }
+  }, [selectedSegmentId]);
 
   const SegmentKeyOptions = mapSegmentKeyOptions(segment);
   const SegmentIdOptions = selectedSegmentKey
@@ -56,27 +71,40 @@ function EditMode(props: Props) {
     : [];
 
   return (
-    <div className="w-[184px] h-[184px] bg-slate-400 px-3">
-      <h3>{props.name}</h3>
+    <div className="w-[260px] h-[184px] px-3 flex flex-col justify-center ">
       <Select
         options={SegmentKeyOptions}
-        placeholder={"Select segmentKey"}
+        placeholder={"Select segment key"}
+        styles={customStyles}
         onChange={(selectedOption) =>
           setSelectedSegmentKey(selectedOption?.value || null)
         }
       />
-      <Select
-        options={SegmentIdOptions}
-        placeholder={"Select segmentId"}
-        isDisabled={!selectedSegmentKey}
-      />
-      <div className="flex justify-between items-center mt-10">
-        <button className="px-[15px] py-[5px] text-red-500 bg-red-200 rounded-md">
+      <span className="mt-2">
+        <Select
+          options={SegmentIdOptions}
+          styles={customStyles}
+          placeholder={"Select segment id"}
+          isDisabled={!selectedSegmentKey}
+          onChange={(selectedOption) =>
+            setSelectedSegmentId(selectedOption?.value || null)
+          }
+        />
+      </span>
+      <div className="flex justify-between items-center mt-2">
+        <button
+          className="px-[30px] py-[5px] text-[#ff5D39] bg-[#FFECE7] rounded-lg"
+          onClick={props.onCancel}
+        >
           Cancel
         </button>
         <button
-          className="px-[15px] py-[5px] text-green-500 bg-green-200 rounded-md"
-          onClick={props.onAdd}
+          className="px-[40px] py-[5px] text-white bg-[#119f97] rounded-lg"
+          disabled={!enableAdd}
+          onClick={() => {
+            props.onDataUpdate(selectedSegmentId, selectedSegmentKey);
+            props.onAdd();
+          }}
         >
           Add
         </button>

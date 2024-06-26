@@ -12,6 +12,12 @@ interface Props {
 
 function Card(props: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(
+    null
+  );
+  const [selectedSegmentKey, setSelectedSegmentKey] = useState<string | null>(
+    null
+  );
 
   const handleViewClick = () => {
     setIsEditMode(true);
@@ -21,20 +27,40 @@ function Card(props: Props) {
     setIsEditMode(false);
   };
 
+  const handleCancel = () => {
+    setIsEditMode(false);
+  };
+
+  const handleDataUpdate = (
+    segmentId: string | null,
+    segmentKey: string | null
+  ) => {
+    setSelectedSegmentId(segmentId);
+    setSelectedSegmentKey(segmentKey);
+  };
+
   return (
-    <div className="">
+    <>
       {isEditMode ? (
-        <EditMode
-          id={props.metric.id}
-          name={props.metric.displayName}
-          onAdd={handleAddClick}
-        />
+        <div className="flex justify-center items-center">
+          <EditMode
+            id={props.metric.id}
+            name={props.metric.displayName}
+            onAdd={handleAddClick}
+            onCancel={handleCancel}
+            onDataUpdate={handleDataUpdate}
+          />
+        </div>
       ) : (
         <div onClick={handleViewClick}>
-          <ViewMode name={props.metric.displayName} />
+          <ViewMode
+            metricId={props.metric.id}
+            selectedSegmentId={selectedSegmentId}
+            selectedSegmentKey={selectedSegmentKey}
+          />
         </div>
       )}
-    </div>
+    </>
   );
 }
 
